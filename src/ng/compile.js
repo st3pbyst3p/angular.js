@@ -2106,6 +2106,9 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           * The additional '\s*' after ',' changes the length of resulting strings wich are trimmed anyway,
           * but it helps not matching both combinations when candidates have spaces before and after the comma.
           * This reduces the split complexity to linear and avoid the ReDoS.
+          * // https://github.com/bonitasoft/angular.js/commit/2da49a6464be96a872128884c78fc61862182371
+          * // https://github.com/bonitasoft/angular.js
+          * // https://github.com/angular/angular.js/forks
       */
       var srcPattern = /(\s+(?:\d+(?:x\s*|w\s*))?,\s*|,\s+)/;
       var pattern = /\s/.test(trimmedSrcset) ? srcPattern : /(,)/;
