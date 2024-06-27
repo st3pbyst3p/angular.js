@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.8.4-local+sha.d8f77817e
+ * @license AngularJS v1.8.4-local+sha.a8917911a
  * (c) 2010-2020 Google LLC. http://angularjs.org
  * License: MIT
  */
@@ -99,7 +99,7 @@ function isValidObjectMaxDepth(maxDepth) {
 function minErr(module, ErrorConstructor) {
   ErrorConstructor = ErrorConstructor || Error;
 
-  var url = 'https://errors.angularjs.org/1.8.4-local+sha.d8f77817e/';
+  var url = 'https://errors.angularjs.org/1.8.4-local+sha.a8917911a/';
   var regex = url.replace('.', '\\.') + '[\\s\\S]*';
   var errRegExp = new RegExp(regex, 'g');
 
@@ -2828,7 +2828,7 @@ function toDebugString(obj, maxDepth) {
 var version = {
   // These placeholder strings will be replaced by grunt's `build` task.
   // They need to be double- or single-quoted.
-  full: '1.8.4-local+sha.d8f77817e',
+  full: '1.8.4-local+sha.a8917911a',
   major: 1,
   minor: 8,
   dot: 4,
@@ -2983,7 +2983,7 @@ function publishExternalAPI(angular) {
       });
     }
   ])
-  .info({ angularVersion: '1.8.4-local+sha.d8f77817e' });
+  .info({ angularVersion: '1.8.4-local+sha.a8917911a' });
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -9421,7 +9421,15 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       // first check if there are spaces because it's not the same pattern
       var trimmedSrcset = trim(value);
       //                (   999x   ,|   999w   ,|   ,|,   )
-      var srcPattern = /(\s+\d+x\s*,|\s+\d+w\s*,|\s+,|,\s+)/;
+      // var srcPattern = /(\s+\d+x\s*,|\s+\d+w\s*,|\s+,|,\s+)/;
+      /* 
+          * Used to be /(\s+\d+x\s*,|\s+\d+w\s*,|\s+,|,\s+)/
+          * We factorize the common parts of the first patterns (with spaces before the comma).
+          * The additional '\s*' after ',' changes the length of resulting strings wich are trimmed anyway,
+          * but it helps not matching both combinations when candidates have spaces before and after the comma.
+          * This reduces the split complexity to linear and avoid the ReDoS.
+      */
+      var srcPattern = /(\s+(?:\d+(?:x\s*|w\s*))?,\s*|,\s+)/;
       var pattern = /\s/.test(trimmedSrcset) ? srcPattern : /(,)/;
 
       // split srcset into tuple of uri and descriptor except for the last item
