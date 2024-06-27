@@ -47,10 +47,10 @@ if (!match) {
 
 // Ensure Node.js dependencies have been installed
 if (!process.env.CI) {
-  var yarnOutput = exec('yarn install');
-  if (yarnOutput.code !== 0) {
-    throw new Error('Yarn install failed: ' + yarnOutput.stderr);
-  }
+  // var yarnOutput = exec('yarn install');
+  // if (yarnOutput.code !== 0) {
+  //   throw new Error('Yarn install failed: ' + yarnOutput.stderr);
+  // }
 }
 
 module.exports = function(grunt) {
